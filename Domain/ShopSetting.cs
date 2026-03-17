@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class ShopSettings: BaseEntity
+    public class ShopSetting: BaseEntity
     {
         public int Id { get; set; }
         [ForeignKey("User")]

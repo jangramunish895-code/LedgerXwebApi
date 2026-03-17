@@ -1,4 +1,5 @@
-﻿using Application.Dtos;
+﻿using Application.Custumers;
+using Application.Dtos;
 using Domain;
 using Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -11,31 +12,22 @@ namespace LedgerX.Controllers
     [ApiController]
     public class CustumersController : ControllerBase
     {
-        private readonly DataContext _context;
-        public CustumersController(DataContext context)
+        //private readonly DataContext _context;
+        private readonly ICustumerApplication _custumerApplication;
+        public CustumersController(ICustumerApplication custumerApplication)
         {
-            _context = context;
+            _custumerApplication = custumerApplication;
 
         }
 
         [HttpGet]
-        public async Task<ActionResult<CustumerDto>> GetCustumers()
+        public async Task<ActionResult<List<CustumerDto>>> GetCustumers()
         {
+
             try
             {
-                var custumers = await _context.Custumers.ToListAsync();
-                var custumerDtos = custumers.Select(c => new CustumerDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Email = c.Email,
-                    PhoneNumber = c.PhoneNumber,
-                    Notes = c.Notes,
-                    Balance = c.Balance,
-                    ProfilePicURL = c.ProfilePicURL
-                }).ToList();
-                return Ok(custumerDtos);
-
+                var custumers = await _custumerApplication.GetAll();
+                return Ok(custumers);
             }
             catch (Exception ex)
             {
@@ -45,68 +37,30 @@ namespace LedgerX.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreateUpdateCustomerDto>> AddCustumers(CreateUpdateCustomerDto custumers)
+        public async Task<ActionResult> AddCustumers(CreateUpdateCustomerDto custumers)
         {
             try
             {
-                var newCustomer = new Custumers
-                {
-                    Name = custumers.Name,
-                    Email = custumers.Email,
-                    PhoneNumber = custumers.PhoneNumber,
-                    Notes = custumers.Notes,
-                    Balance = custumers.Balance,
-                    ProfilePicURL = custumers.ProfilePicURL
-                };
-                
-                _context.Custumers.Add(newCustomer);
-                await _context.SaveChangesAsync();
-                
-                var custumerDto = new CreateUpdateCustomerDto
-                {
-                    Name = custumers.Name,
-                    Email = custumers.Email,
-                    PhoneNumber = custumers.PhoneNumber,
-                    Notes = custumers.Notes,
-                    Balance = custumers.Balance,
-                    ProfilePicURL = custumers.ProfilePicURL
-                };
-                return Ok(custumerDto);
-
+                await _custumerApplication.Add(custumers);
+                return Ok(custumers);
             }
             catch (Exception ex)
             {
                 return StatusCode(400, $"Internal server error: {ex.Message}");
-
             }
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<CreateUpdateCustomerDto>> UpdateCustumers(int id, Custumers custumers)
+        public async Task<ActionResult> UpdateCustumers(int id, CreateUpdateCustomerDto custumers)
         {
             try
             {
-                var existingCustumers = await _context.Custumers.FindAsync(id);
-                if (existingCustumers == null)
+                var existingCustumer = await _custumerApplication.GetById(id);
+                if (existingCustumer == null)
                 {
                     return NotFound($"Custumers with ID {id} not found.");
                 }
-                existingCustumers.Name = custumers.Name;
-                existingCustumers.Email = custumers.Email;
-                existingCustumers.PhoneNumber = custumers.PhoneNumber;
-                existingCustumers.Notes = custumers.Notes;
-                existingCustumers.Balance = custumers.Balance;
-                existingCustumers.ProfilePicURL = custumers.ProfilePicURL;
-                await _context.SaveChangesAsync();
-                var custumerDto = new CreateUpdateCustomerDto
-                {
-                    Name = existingCustumers.Name,
-                    Email = existingCustumers.Email,
-                    PhoneNumber = existingCustumers.PhoneNumber,
-                    Notes = existingCustumers.Notes,
-                    Balance = existingCustumers.Balance,
-                    ProfilePicURL = existingCustumers.ProfilePicURL
-                };
-                return Ok(custumerDto);
+                await _custumerApplication.Update(id, custumers);
+                return Ok($"Custumers with ID {id} updated successfully.");
 
             }
             catch (Exception ex)
@@ -120,14 +74,8 @@ namespace LedgerX.Controllers
         {
             try
             {
-                var custumers = await _context.Custumers.FindAsync(id);
-                if (custumers == null)
-                {
-                    return NotFound($"Custumers with ID {id} not found.");
-                }
-                _context.Custumers.Remove(custumers);
-                await _context.SaveChangesAsync();
-                return Ok($"Custumers with ID {id} deleted successfully.");
+                await _custumerApplication.Delete(id);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -135,4 +83,5 @@ namespace LedgerX.Controllers
             }
         }
     }
+
 }

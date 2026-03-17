@@ -78,7 +78,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.ToTable("Custumers");
+                    b.ToTable("Custumers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.ShopSettings", b =>
@@ -128,7 +128,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShopSettings");
+                    b.ToTable("ShopSettings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Transaction", b =>
@@ -169,7 +169,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -261,7 +261,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.ShopSettings", b =>

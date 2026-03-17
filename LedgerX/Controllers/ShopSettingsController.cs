@@ -78,7 +78,7 @@ namespace LedgerX.Controllers
                 else
                 {
                     // Create new settings
-                    var newShopSettings = new ShopSettings
+                    var newShopSettings = new ShopSetting
                     {
                         UserId = shopSettingsDto.UserId,
                         ShopName = shopSettingsDto.ShopName,

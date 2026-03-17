@@ -11,8 +11,8 @@ namespace Infrastructure
         }
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Custumers> Custumers { get; set; }
-        public DbSet<ShopSettings> ShopSettings { get; set; }
+        public DbSet<Custumer> Custumers { get; set; }
+        public DbSet<ShopSetting> ShopSettings { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,7 +53,7 @@ namespace Infrastructure
             modelBuilder.Entity<User>().HasIndex(x => x.PhoneNumber)
                 .IsUnique();
 
-            modelBuilder.Entity<Custumers>(entity =>
+            modelBuilder.Entity<Custumer>(entity =>
             {
                 entity.HasKey(x => x.Id);
 
@@ -88,7 +88,7 @@ namespace Infrastructure
                       .IsUnique();
             });
 
-            modelBuilder.Entity<ShopSettings>(entity =>
+            modelBuilder.Entity<ShopSetting>(entity =>
             {
                 entity.HasKey(x => x.Id);
 

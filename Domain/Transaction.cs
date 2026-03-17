@@ -10,7 +10,7 @@ namespace Domain
         public int Id { get; set; }
         public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
-        public Custumers Customer { get; set; }
+        public Custumer Customer { get; set; }
         public TransactionType TransactionType  { get; set; }
         public int Amount { get; set; }
         public string? Description { get; set; }

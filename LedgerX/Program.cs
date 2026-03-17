@@ -1,37 +1,32 @@
+using Application.Custumers;
 using Infrastructure;
+using Infrastructure.Repositories.Custumers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<DataContext>(options =>
 options.UseSqlServer(connectionString)
     );
 
+builder.Services.AddTransient<ICustumerRepository, CustumerRepository>();
+builder.Services.AddTransient<ICustumerApplication, CustumerApplication>();
+
 
 var app = builder.Build();
 
 app.UseStaticFiles();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

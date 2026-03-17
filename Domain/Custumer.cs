@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class Custumers: BaseEntity
+    public class Custumer: BaseEntity
     {
         [Key]
         public int Id { get; set; }
