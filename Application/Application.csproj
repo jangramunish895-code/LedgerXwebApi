@@ -11,10 +11,4 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Users\" />
-    <Folder Include="Transactions\" />
-    <Folder Include="ShopSettings\" />
-  </ItemGroup>
-
 </Project>

@@ -1,6 +1,12 @@
 using Application.Custumers;
+using Application.ShopSettings;
+using Application.Transactions;
+using Application.Users;
 using Infrastructure;
 using Infrastructure.Repositories.Custumers;
+using Infrastructure.Repositories.ShopSettings;
+using Infrastructure.Repositories.Transactions;
+using Infrastructure.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +23,12 @@ options.UseSqlServer(connectionString)
 
 builder.Services.AddTransient<ICustumerRepository, CustumerRepository>();
 builder.Services.AddTransient<ICustumerApplication, CustumerApplication>();
+builder.Services.AddTransient<IShopSettingsApplication, ShopSettingsApplication>();
+builder.Services.AddTransient<IShopSettingsRepository, ShopSettingsRepository>();
+builder.Services.AddTransient<IUserApplication, UserApplication>();
+builder.Services.AddTransient<IUsersRepository, UsersRepository>();
+builder.Services.AddTransient<ITransactionsApplication, TransactionsApplication>();
+builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 
 
 var app = builder.Build();

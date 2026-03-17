@@ -1,5 +1,7 @@
 ﻿using Application.Dtos;
+using Application.Transactions;
 using Infrastructure;
+using Infrastructure.Repositories.Transactions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +12,11 @@ namespace LedgerX.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly ITransactionsApplication _transactionsApplication;
 
-        public TransactionController(DataContext context)
+        public TransactionController(ITransactionsApplication transactionsApplication)
         {
-            _context = context;
+           _transactionsApplication = transactionsApplication;
         }
 
         [HttpGet]
@@ -22,41 +24,24 @@ namespace LedgerX.Controllers
         {
             try
             {
-                var transactions = await _context.Transactions
-                    .Select(t => new TransactionDto
-                    {
-                        Id = t.Id,
-                        CustomerId = t.CustomerId,
-                        TransactionType = t.TransactionType,
-                        Amount = t.Amount,
-                        Description = t.Description
-                    })
-                    .ToListAsync();
+                var transactions = await _transactionsApplication.GetAll();
                 return Ok(transactions);
-
             }
             catch (Exception ex)
             {
-
                 return StatusCode(400, "An error occurred ");
             }
         }
+                 
+      
 
         [HttpPost]
-        public async Task<ActionResult<CreateUpdateTransactionDto>> AddTransaction(CreateUpdateTransactionDto transactionDto)
+        public async Task<ActionResult> AddTransaction(CreateUpdateTransactionDto transactionDto)
         {
             try
             {
-                var transaction = new Domain.Transaction
-                {
-                    CustomerId = transactionDto.CustomerId,
-                    TransactionType = transactionDto.TransactionType,
-                    Amount = transactionDto.Amount,
-                    Description = transactionDto.Description
-                };
-                _context.Transactions.Add(transaction);
-                await _context.SaveChangesAsync();
-                return Ok(transactionDto);
+                await _transactionsApplication.Add(transactionDto);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -72,18 +57,13 @@ namespace LedgerX.Controllers
         {
             try
             {
-                var existingTransaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == id);
+                var existingTransaction = await _transactionsApplication.GetById(id);
                 if (existingTransaction == null)
                 {
                     return NotFound();
                 }
 
-                existingTransaction.CustomerId = transactionDto.CustomerId;
-                existingTransaction.TransactionType = transactionDto.TransactionType;
-                existingTransaction.Amount = transactionDto.Amount;
-                existingTransaction.Description = transactionDto.Description;
-
-                await _context.SaveChangesAsync();
+                await _transactionsApplication.Update(id, transactionDto);
                 return Ok(transactionDto);
             }
             catch (Exception ex)
@@ -97,13 +77,7 @@ namespace LedgerX.Controllers
         {
             try
             {
-                var transaction = await _context.Transactions.FindAsync(id);
-                if (transaction == null)
-                {
-                    return NotFound();
-                }
-                _context.Transactions.Remove(transaction);
-                await _context.SaveChangesAsync();
+               await _transactionsApplication.Delete(id);
                 return Ok();
             }
             catch (Exception ex)

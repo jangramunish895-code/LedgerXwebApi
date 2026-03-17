@@ -1,7 +1,9 @@
 ﻿
 using Application.Dtos;
+using Application.Users;
 using Domain;
 using Infrastructure;
+using Infrastructure.Repositories.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,32 +14,21 @@ namespace LedgerX.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly DataContext _context;
+       private readonly IUserApplication _userApplication;
 
-        public UserController(DataContext context)
+        public UserController(IUserApplication userApplication)
         {
-            _context = context;
+            _userApplication = userApplication;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<UserDto>> GetUsers()
+        public async Task<ActionResult<List<UserDto>>> GetUsers()
         {
             try
             {
-                var users = await _context.Users.Select(u => new UserDto
-                {
-                    Id = u.Id,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Email = u.Email,
-                    PhoneNumber = u.PhoneNumber,
-                    City = u.City,
-                    Country = u.Country,
-                    Role = u.Role
-                }).ToListAsync();
+                var users = await _userApplication.GetAll();
                 return Ok(users);
-
             }
             catch (Exception ex)
             {
@@ -46,28 +37,15 @@ namespace LedgerX.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreateUpdateUserDto>> AddUser(CreateUpdateUserDto userDto)
+        public async Task<ActionResult> AddUser(CreateUpdateUserDto userDto)
         {
             try
             {
-             var user = new User
-                {
-                    FirstName = userDto.FirstName,
-                    LastName = userDto.LastName,
-                    Email = userDto.Email,
-                    Password = userDto.Password,
-                    PhoneNumber = userDto.PhoneNumber,
-                    Address1 = userDto.Address1,
-                    Address2 = userDto.Address2,
-                    City = userDto.City,
-                    State = userDto.State,
-                    Country = userDto.Country,
-                    PinCode = userDto.PinCode
-                };
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-                return Ok(user);
-                }
+                await _userApplication.Add(userDto);
+                return Ok();
+            }
+               
+                
             catch (Exception ex)
             {
                 return StatusCode(400, "error");
@@ -79,14 +57,8 @@ namespace LedgerX.Controllers
         {
             try
             {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null)
-                {
-                    return NotFound("User with ");
-                }
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-                return Ok("User with ID");
+              await _userApplication.Delete(id);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -99,10 +71,10 @@ namespace LedgerX.Controllers
         {
             try
             {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null)
+               var user = await _userApplication.GetById(id);
+                if(user == null)
                 {
-                    return NotFound("User with ID");
+                    return NotFound($"User with ID {id} not found.");
                 }
                 return Ok(user);
 
@@ -115,33 +87,23 @@ namespace LedgerX.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateUser(int id, User updatedUser)
+        public async Task<ActionResult> UpdateUser(int id, CreateUpdateUserDto input)
         {
             try
             {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null)
+                var existingUser = await _userApplication.GetById(id);
+                if (existingUser == null)
                 {
-                    return NotFound("User with ID");
+                    return NotFound($"User with ID {id} not found.");
                 }
-                user.FirstName = updatedUser.FirstName;
-                user.Email = updatedUser.Email;
-                user.Password = updatedUser.Password;
-                user.PhoneNumber = updatedUser.PhoneNumber;
-                user.Address1 = updatedUser.Address1;
-                user.Address2 = updatedUser.Address2;
-                user.City = updatedUser.City;
-                user.State = updatedUser.State;
-                user.Country = updatedUser.Country;
-                user.PinCode = updatedUser.PinCode;
-
-                await _context.SaveChangesAsync();
-                return Ok(user);
+                    await _userApplication.Update(id, input);
+                    return Ok(input);
             }
             catch (Exception ex)
             {
                 return StatusCode(400, $"Internal server error: {ex.Message}");
             }
+            }
         }
     }
-}
+

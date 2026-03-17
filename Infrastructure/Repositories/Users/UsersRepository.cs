@@ -1,8 +1,5 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Infrastructure.Repositories.Users
 {
@@ -14,15 +11,15 @@ namespace Infrastructure.Repositories.Users
         {
             _context = context;
         }
-        public  async Task Add(User user)
+        public async Task Add(User user)
         {
-           _context.Users.Add(user);
-                        await _context.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
         }
 
-        public  async Task DeleteById(int id)
+        public async Task DeleteById(int id)
         {
-           var user =  _context.Users.Find(id);
+            var user = _context.Users.Find(id);
             if (user != null)
             {
                 _context.Users.Remove(user);
@@ -30,14 +27,14 @@ namespace Infrastructure.Repositories.Users
             }
         }
 
-        public  async Task<List<User>> GetAll()
+        public async Task<List<User>> GetAll()
         {
-          return await _context.Users.ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
         public async Task<User> GetById(int id)
         {
-           return await _context.Users.FindAsync(id);
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task Update(User user)

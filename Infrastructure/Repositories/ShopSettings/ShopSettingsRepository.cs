@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.ShopSettings
 {
-    internal class ShopSettingsRepository : IShopSettingsRepository
+    public class ShopSettingsRepository : IShopSettingsRepository
     {
         private readonly DataContext _context;
         public ShopSettingsRepository(DataContext context) {

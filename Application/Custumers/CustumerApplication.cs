@@ -22,6 +22,7 @@ namespace Application.Custumers
                 Balance = input.Balance,
                 ProfilePicURL = input.ProfilePicURL
             };
+            await _custumerRepository.Add(custumer);
         }
 
         public async Task Delete(int id)
