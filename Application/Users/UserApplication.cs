@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+
 using Domain;
 using Infrastructure.Repositories.Users;
 
@@ -8,15 +9,17 @@ namespace Application.Users
     public class UserApplication : IUserApplication
     {
         private readonly IUsersRepository _userRepository;
+    
 
         public UserApplication(IUsersRepository userRepository)
         {
             _userRepository = userRepository;
+          
         }
 
-        public  async Task Add(CreateUpdateUserDto input)
+        public async Task Add(CreateUpdateUserDto input)
         {
-           User user = new User
+            User user = new User
             {
                 FirstName = input.FirstName,
                 LastName = input.LastName,
@@ -48,48 +51,47 @@ namespace Application.Users
                 LastName = u.LastName,
                 Email = u.Email,
                 PhoneNumber = u.PhoneNumber,
-              
+
                 City = u.City,
                 Country = u.Country,
             }).ToList();
         }
 
-        public  async Task<UserDto> GetById(int id)
+        public async Task<UserDto> GetById(int id)
         {
-          var user = await _userRepository.GetById(id);
-          var userDto = new UserDto
-          {
-              Id = user.Id,
-              FirstName = user.FirstName,
-              LastName = user.LastName,
-              Email = user.Email,
-              PhoneNumber = user.PhoneNumber,
-              City = user.City,
-              Country = user.Country,
-          };
-          return userDto;   
+            var user = await _userRepository.GetById(id);
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                City = user.City,
+                Country = user.Country,
+            };
+            return userDto;
         }
-
         public Task Update(int id, CreateUpdateUserDto input)
         {
-           var user=new User
-           {
-               Id = id,
-               FirstName = input.FirstName,
-               LastName = input.LastName,
-               Email = input.Email,
-               PhoneNumber = input.PhoneNumber,
-               Address1 = input.Address1,
-               Address2 = input.Address2,
-               City = input.City,
-               State = input.State,
-               Country = input.Country,
-               PinCode = input.PinCode,
-               Password = input.Password
-           };
-           return _userRepository.Update(user);
+            var user = new User
+            {
+                Id = id,
+                FirstName = input.FirstName,
+                LastName = input.LastName,
+                Email = input.Email,
+                PhoneNumber = input.PhoneNumber,
+                Address1 = input.Address1,
+                Address2 = input.Address2,
+                City = input.City,
+                State = input.State,
+                Country = input.Country,
+                PinCode = input.PinCode,
+                Password = input.Password
+            };
+            return _userRepository.Update(user);
         }
 
-       
+
     }
 }

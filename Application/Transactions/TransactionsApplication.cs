@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+
 using Domain;
 using Infrastructure.Repositories.Transactions;
 
@@ -8,22 +9,24 @@ namespace Application.Transactions
 
     {
         private readonly ITransactionRepository _transactionsRepository;
+      
 
         public TransactionsApplication(ITransactionRepository transactionsRepository)
         {
             _transactionsRepository = transactionsRepository;
+           
         }
 
-        public  async Task Add(CreateUpdateTransactionDto input)
+        public async Task Add(CreateUpdateTransactionDto input)
         {
-        Transaction transactions = new Transaction
-          {
-            CustomerId = input.CustomerId,
-            TransactionType = input.TransactionType,
-            Amount = input.Amount,
-            Description = input.Description
-          };
-            
+            Transaction transactions = new Transaction
+            {
+                CustomerId = input.CustomerId,
+                TransactionType = input.TransactionType,
+                Amount = input.Amount,
+                Description = input.Description
+            };
+
             await _transactionsRepository.Add(transactions);
         }
         public  async Task Delete(int id)
@@ -31,7 +34,7 @@ namespace Application.Transactions
            await _transactionsRepository.DeleteById(id);
         }
 
-        public  async Task<List<TransactionDto>> GetAll()
+        public async Task<List<TransactionDto>> GetAll()
         {
             var transactions = await _transactionsRepository.GetAll();
             return transactions.Select(t => new TransactionDto
@@ -59,7 +62,7 @@ namespace Application.Transactions
 
         public Task Update(int id, CreateUpdateTransactionDto input)
         {
-           var transaction = new Transaction
+            var transaction = new Transaction
             {
                 Id = id,
                 CustomerId = input.CustomerId,

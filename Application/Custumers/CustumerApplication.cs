@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+
 using Domain;
 using Infrastructure.Repositories.Custumers;
 
@@ -7,11 +8,13 @@ namespace Application.Custumers
     public class CustumerApplication : ICustumerApplication
     {
         private readonly ICustumerRepository _custumerRepository;
+     
         public CustumerApplication(ICustumerRepository custumerRepository)
         {
             _custumerRepository = custumerRepository;
+           
         }
-        public  async Task Add(CreateUpdateCustomerDto input)
+        public async Task Add(CreateUpdateCustomerDto input)
         {
             Custumer custumer = new Custumer
             {
@@ -22,8 +25,8 @@ namespace Application.Custumers
                 Balance = input.Balance,
                 ProfilePicURL = input.ProfilePicURL
             };
-            await _custumerRepository.Add(custumer);
         }
+
 
         public async Task Delete(int id)
         {
@@ -32,7 +35,7 @@ namespace Application.Custumers
 
         public async Task<List<CustumerDto>> GetAll()
         {
-           var custumers = await _custumerRepository.GetAll();
+            var custumers = await _custumerRepository.GetAll();
             return custumers.Select(c => new CustumerDto
             {
                 Id = c.Id,
@@ -45,10 +48,10 @@ namespace Application.Custumers
             }).ToList();
         }
 
-        public  async Task<CustumerDto> GetById(int id)
+        public async Task<CustumerDto> GetById(int id)
         {
-            var custumer =  await _custumerRepository.GetById(id);
-           var custumerDto = new CustumerDto
+            var custumer = await _custumerRepository.GetById(id);
+            var custumerDto = new CustumerDto
             {
                 Id = custumer.Id,
                 Name = custumer.Name,
@@ -61,11 +64,11 @@ namespace Application.Custumers
             return custumerDto;
 
         }
-        
+
 
         public Task Update(int id, CreateUpdateCustomerDto input)
         {
-           var custumer = new Custumer
+            var custumer = new Custumer
             {
                 Id = id,
                 Name = input.Name,

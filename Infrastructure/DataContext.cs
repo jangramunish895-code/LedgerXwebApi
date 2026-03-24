@@ -14,6 +14,7 @@ namespace Infrastructure
         public DbSet<Custumer> Custumers { get; set; }
         public DbSet<ShopSetting> ShopSettings { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Otp> Otps { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
