@@ -13,6 +13,7 @@ namespace Application.Dtos
             public TransactionType TransactionType { get; set; }
             public int Amount { get; set; }
             public string? Description { get; set; }
+        public CustumerDto Custumer { get; set; }
         
     }
 }

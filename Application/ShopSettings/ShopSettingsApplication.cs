@@ -26,9 +26,14 @@ namespace Application.ShopSettings
             {
                 UserId = input.UserId,
                 ShopName = input.ShopName,
+                Email = input.Email,
                 OwnerName = input.OwnerName,
                 PhoneNumber = input.PhoneNumber,
-                GstNumber = input.GstNumber
+                GstNumber = input.GstNumber,
+              
+
+
+
             };
             await _shopSettingsRepository.Add(shopSetting);
 
@@ -48,9 +53,30 @@ namespace Application.ShopSettings
                 Id = s.Id,
                 UserId = s.UserId,
                 ShopName = s.ShopName,
+                Email = s.Email,
                 OwnerName = s.OwnerName,
                 PhoneNumber = s.PhoneNumber,
-                GstNumber = s.GstNumber
+                GstNumber = s.GstNumber,
+                User =s.User== null ? null : new UserDto
+                {
+                    Id = s.User.Id,
+                    FirstName = s.User.FirstName,
+                    LastName = s.User.LastName,
+                    City = s.User.City,
+                    Country = s.User.Country,
+                    Role = s.User.Role,
+                    Email = s.User.Email,
+                    State = s.User.State,
+                    Address1 = s.User.Address1,
+                    Address2 = s.User.Address2,
+                   
+                    PhoneNumber = s.User.PhoneNumber
+
+                },
+                CreatedDate = DateTime.UtcNow,
+                IsDeleted = false,
+                IsActive = false,
+                UpdatedDate = DateTime.UtcNow,
             }).ToList();
             return dto;
         }
@@ -63,9 +89,24 @@ namespace Application.ShopSettings
                 Id = shopsetting.Id,
                 UserId = shopsetting.UserId,
                 ShopName = shopsetting.ShopName,
+                Email = shopsetting.Email,
                 OwnerName = shopsetting.OwnerName,
                 PhoneNumber = shopsetting.PhoneNumber,
-                GstNumber = shopsetting.GstNumber
+                GstNumber = shopsetting.GstNumber,
+                User=new UserDto
+                {
+                    Id = shopsetting.User.Id,
+                    FirstName = shopsetting.User.FirstName,
+                    LastName = shopsetting.User.LastName,
+                    City = shopsetting.User.City,
+                    Country = shopsetting.User.Country,
+                    Role = shopsetting.User.Role,
+                    Email = shopsetting.User.Email,
+                    State = shopsetting.User.State,
+                    Address1 = shopsetting.User.Address1,
+                    Address2 = shopsetting.User.Address2,
+                    PhoneNumber = shopsetting.User.PhoneNumber
+                },
             };
             return dto;
         }
@@ -77,6 +118,7 @@ namespace Application.ShopSettings
             {
                 shopSetting.UserId = input.UserId;
                 shopSetting.ShopName = input.ShopName;
+                shopSetting.Email = input.Email;
                 shopSetting.OwnerName = input.OwnerName;
                 shopSetting.PhoneNumber = input.PhoneNumber;
                 shopSetting.GstNumber = input.GstNumber;

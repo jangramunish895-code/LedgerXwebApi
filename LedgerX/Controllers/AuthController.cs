@@ -157,6 +157,7 @@ namespace LedgerX.Controllers
             var claims = new[]
             {
                 new Claim("role","Admin"),
+
                 new Claim("username", username),
               
             };

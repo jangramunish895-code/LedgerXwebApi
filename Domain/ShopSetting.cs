@@ -10,7 +10,11 @@ namespace Domain
         public User User { get; set; }
         public string ShopName { get; set; }
         public string OwnerName { get; set; }
+        public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string? GstNumber { get; set; }
+      
+  
+
     }
 }

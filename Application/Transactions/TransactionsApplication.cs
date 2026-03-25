@@ -43,7 +43,17 @@ namespace Application.Transactions
                 CustomerId = t.CustomerId,
                 TransactionType = t.TransactionType,
                 Amount = t.Amount,
-                Description = t.Description
+                Description = t.Description,
+
+                Custumer=t.Customer==null?null:new CustumerDto
+                {
+                    Id=t.Customer.Id,
+                    Name=t.Customer.Name,
+                    Email=t.Customer.Email,
+                    PhoneNumber=t.Customer.PhoneNumber,
+                    Notes=t.Customer.Notes,
+                    IsActive=t.Customer.IsActive,
+                }
             }).ToList();
         }
 
@@ -56,7 +66,18 @@ namespace Application.Transactions
                 CustomerId = transaction.CustomerId,
                 TransactionType = transaction.TransactionType,
                 Amount = transaction.Amount,
-                Description = transaction.Description
+                Description = transaction.Description,
+                 
+                Custumer=transaction.Customer==null?null:new CustumerDto
+                {
+                    Id=transaction.Customer.Id,
+                    Name=transaction.Customer.Name,
+                    Email=transaction.Customer.Email,
+                    PhoneNumber=transaction.Customer.PhoneNumber,
+                    Notes=transaction.Customer.Notes,
+                    IsActive=transaction.Customer.IsActive,
+                }
+
             };
         }
 

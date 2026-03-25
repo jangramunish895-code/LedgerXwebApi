@@ -16,7 +16,7 @@ namespace LedgerX.Controllers
 
         public TransactionController(ITransactionsApplication transactionsApplication)
         {
-           _transactionsApplication = transactionsApplication;
+            _transactionsApplication = transactionsApplication;
         }
 
         [HttpGet]
@@ -32,8 +32,7 @@ namespace LedgerX.Controllers
                 return StatusCode(400, "An error occurred ");
             }
         }
-                 
-      
+
 
         [HttpPost]
         public async Task<ActionResult> AddTransaction(CreateUpdateTransactionDto transactionDto)
@@ -77,7 +76,7 @@ namespace LedgerX.Controllers
         {
             try
             {
-               await _transactionsApplication.Delete(id);
+                await _transactionsApplication.Delete(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -86,5 +85,23 @@ namespace LedgerX.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TransactionDto>> GetTransactionById(int id)
+        {
+            try
+            {
+                var transaction = await _transactionsApplication.GetById(id);
+                if (transaction == null)
+                {
+                    return NotFound();
+                }
+                return Ok(transaction);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, "An error occurred ");
+            }
+
+        }
     }
 }

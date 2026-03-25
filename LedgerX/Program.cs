@@ -1,5 +1,6 @@
 using Application.Common;
 using Application.Custumers;
+using Application.Dashboards;
 using Application.Email;
 using Application.ShopSettings;
 using Application.Transactions;
@@ -76,6 +77,7 @@ builder.Services.AddTransient<IUsersRepository, UsersRepository>();
 builder.Services.AddTransient<ITransactionsApplication, TransactionsApplication>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<IDashBoardApplication, DashBoardApplication>();
 
 //builder.Services.AddAutoMapper(typeof(mapping));
 

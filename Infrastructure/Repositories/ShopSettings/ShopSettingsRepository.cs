@@ -33,12 +33,12 @@ namespace Infrastructure.Repositories.ShopSettings
 
         public  async Task<List<ShopSetting>> GetAll()
         {
-            return await _context.ShopSettings.ToListAsync();
+            return await _context.ShopSettings.Include(x=>x.User).ToListAsync();
         }
 
         public async Task<ShopSetting> GetById(int id)
         {
-            return await _context.ShopSettings.FindAsync(id);
+            return await _context.ShopSettings.Include(x => x.User).FirstOrDefaultAsync(s => s.Id == id);
         }
 
       

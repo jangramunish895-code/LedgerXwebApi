@@ -35,92 +35,31 @@ namespace LedgerX.Controllers
         {
             return Ok(await _context.Users.ToListAsync());
         }
-        //[HttpGet]
-        //public async Task<ActionResult<List<UserDto>>> GetUsers()
-        //{
-        //    try
-        //    {
-        //        var users = await _userApplication.GetAll();
-        //        return Ok(users);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(400, $"Internal server error: {ex.Message}");
-        //    }
-        //}
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
 
-
-
-        //[HttpPost]
-        //public async Task<ActionResult> AddUser(CreateUpdateUserDto userDto)
-        //{
-        //    try
-        //    {
-        //        await _userApplication.Add(userDto);
-        //        return Ok();
-        //    }
-
-
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(400, "error");
-        //    }
-        //}
-
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult> DeleteUser(int id)
-        //{
-        //    try
-        //    {
-        //      await _userApplication.Delete(id);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(400, $"Internal server error: {ex.Message}");
-        //    }
-        //}
-
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult> GetUserById(int id)
-        //{
-        //    try
-        //    {
-        //       var user = await _userApplication.GetById(id);
-        //        if(user == null)
-        //        {
-        //            return NotFound($"User with ID {id} not found.");
-        //        }
-        //        return Ok(user);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(400, $"Internal server error: {ex.Message}");
-        //    }
-
-        //}
-
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult> UpdateUser(int id, CreateUpdateUserDto input)
-        //{
-        //    try
-        //    {
-        //        var existingUser = await _userApplication.GetById(id);
-        //        if (existingUser == null)
-        //        {
-        //            return NotFound($"User with ID {id} not found.");
-        //        }
-        //            await _userApplication.Update(id, input);
-        //            return Ok(input);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(400, $"Internal server error: {ex.Message}");
-        //    }
-        //    }
-        //}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+       
     }
 
 }
