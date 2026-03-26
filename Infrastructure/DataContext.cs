@@ -45,7 +45,7 @@ namespace Infrastructure
             modelBuilder.Entity<User>().Property(x => x.PinCode).IsRequired().HasMaxLength(10);
 
             modelBuilder.Entity<User>().Property(x => x.Password).IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<User>().Property(x => x.Role).IsRequired();
+            modelBuilder.Entity<User>().Property(x => x.Role).HasConversion<string>();
 
             modelBuilder.Entity<User>()
                 .HasIndex(x => x.Email)

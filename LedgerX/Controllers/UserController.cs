@@ -14,32 +14,37 @@ namespace LedgerX.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly DataContext _context;
+        //private readonly DataContext _context;
+        private readonly IUserApplication _userApplication;
 
-        public UserController(DataContext context)
+        public UserController(IUserApplication userApplication)
         {
-            _context = context;
+            _userApplication = userApplication;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(User user)
+        public async Task<ActionResult> Add(CreateUpdateUserDto input)
         {
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-
+            await _userApplication.Add(input);
             return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<UserDto>> Get()
         {
-            return Ok(await _context.Users.ToListAsync());
+            var users = await _userApplication.GetAll();
+                        return Ok(users);
+
+
+
+           
+
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<UserDto>> GetById(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userApplication.GetById(id);
             if (user == null)
             {
                 return NotFound();
@@ -50,14 +55,12 @@ namespace LedgerX.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userApplication.GetById(id);
             if (user == null)
             {
                 return NotFound();
             }
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return Ok();
+        return Ok();
         }
        
     }

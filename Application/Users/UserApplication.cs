@@ -51,9 +51,12 @@ namespace Application.Users
                 LastName = u.LastName,
                 Email = u.Email,
                 PhoneNumber = u.PhoneNumber,
-
+                Role = u.Role.ToString(),
                 City = u.City,
                 Country = u.Country,
+                Address1 = u.Address1,
+                Address2= u.Address2,
+
             }).ToList();
         }
 
@@ -61,7 +64,11 @@ namespace Application.Users
         {
             var user = await _userRepository.GetById(id);
             var userDto = new UserDto
-            {
+            { 
+
+
+
+               
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -69,6 +76,9 @@ namespace Application.Users
                 PhoneNumber = user.PhoneNumber,
                 City = user.City,
                 Country = user.Country,
+                    Role = user.Role.ToString(),
+                    Address1 = user.Address1,
+                    Address2 = user.Address2
             };
             return userDto;
         }
